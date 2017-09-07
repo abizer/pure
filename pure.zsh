@@ -108,6 +108,9 @@ prompt_pure_preprompt_render() {
 	# Initialize the preprompt array.
 	local -a preprompt_parts
 
+	# Username and machine, if applicable, first
+	[[ -n $prompt_pure_username ]] && preprompt_parts+=('$prompt_pure_username')
+        
 	# Set the path.
 	preprompt_parts+=('%F{blue}%~%f')
 
@@ -121,8 +124,6 @@ prompt_pure_preprompt_render() {
 		preprompt_parts+=('%F{cyan}${prompt_pure_git_arrows}%f')
 	fi
 
-	# Username and machine, if applicable.
-	[[ -n $prompt_pure_username ]] && preprompt_parts+=('$prompt_pure_username')
 	# Execution time.
 	[[ -n $prompt_pure_cmd_exec_time ]] && preprompt_parts+=('%F{yellow}${prompt_pure_cmd_exec_time}%f')
 
@@ -455,8 +456,8 @@ prompt_pure_setup() {
 	add-zsh-hook precmd prompt_pure_precmd
 	add-zsh-hook preexec prompt_pure_preexec
 
-	# show username@host if logged in through SSH
-	[[ "$SSH_CONNECTION" != '' ]] && prompt_pure_username='%F{242}%n@%m%f'
+        # always show username
+	prompt_pure_username='%F{242}%n%f@%F{215}%m%f'
 
 	# show username@host if root, with username in white
 	[[ $UID -eq 0 ]] && prompt_pure_username='%F{white}%n%f%F{242}@%m%f'
